@@ -18,7 +18,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        $res = [
+            'users' => User::all(),
+            'status' => 'success',
+            'message' => 'get list'
+        ];
+        return $res;
     }
 
 
@@ -40,7 +45,12 @@ class UserController extends Controller
             $user->Level = $request->level;
             $user->TotalPoint = 0;
             $user->save();
-            return $user;
+            $res = [
+                'user' => $user,
+                'status' => 'success',
+                'message' => 'Create new user successfully'
+            ];
+            return $res;
         }
         return response()->json('Username was existed');
     }
