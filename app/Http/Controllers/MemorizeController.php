@@ -14,7 +14,12 @@ class MemorizeController extends Controller
      */
     public function index()
     {
-        return Memorize::all();
+        $res = [
+            'memorizes' => Memorize::all(),
+            'status' => 'success',
+            'message' => 'get list'
+        ];
+        return $res;
     }
 
     /**

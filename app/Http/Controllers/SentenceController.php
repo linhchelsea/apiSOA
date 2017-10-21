@@ -14,7 +14,12 @@ class SentenceController extends Controller
      */
     public function index()
     {
-        return Sentence::all();
+        $res = [
+            'sentences' => Sentence::all(),
+            'status' => 'success',
+            'message' => 'get list'
+        ];
+        return $res;
     }
 
     /**
@@ -39,7 +44,12 @@ class SentenceController extends Controller
         $sentence->EngSentence = $request->EngSentence;
         $sentence->VieSentence = $request->VieSentence;
         $sentence->save();
-        return $sentence;
+        $res = [
+            'sentence' => $sentence,
+            'status' => 'success',
+            'message' => 'get sentence'
+        ];
+        return $res;
     }
 
     /**

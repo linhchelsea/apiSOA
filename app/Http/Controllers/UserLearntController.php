@@ -19,9 +19,11 @@ class UserLearntController extends Controller
                 ->where('IdLesson','=',$idLesson)
                 ->first();
             if($userLearnt != null){
-                $userLearnt = UserLearnt::where('IdUser','=',$idUser)
-                    ->where('IdLesson','=',$idLesson)
-                    ->update(['LessonPoint' => $point]);
+                if($userLearnt->LessonPoint < $point){
+                    $userLearnt = UserLearnt::where('IdUser','=',$idUser)
+                        ->where('IdLesson','=',$idLesson)
+                        ->update(['LessonPoint' => $point]);
+                }
                 $userLearnt = UserLearnt::where('IdUser','=',$idUser)
                     ->where('IdLesson','=',$idLesson)
                     ->first();

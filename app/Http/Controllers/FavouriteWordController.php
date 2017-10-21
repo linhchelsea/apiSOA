@@ -19,7 +19,12 @@ class FavouriteWordController extends Controller
         $favouriteWords = FavouriteWord::join('Users','FavoriteWords.IdUser','=','Users.Id')
             ->join('Vocabulary','FavoriteWords.IdVocabulary','=','Vocabulary.Id')
             ->get();
-        return $favouriteWords;
+        $res = [
+            'favouriteWords' => $favouriteWords,
+            'status'=> 'success',
+            'message' => 'Get list of favouriteWord'
+        ];
+        return $res;
     }
 
     /**
@@ -51,7 +56,7 @@ class FavouriteWordController extends Controller
         }
         $arr_idVoca = $data->idvoca;
         //them vao bang
-        $res = array();
+        $favouriteWords = array();
         for($i = 0; $i< count($arr_idVoca); $i++){
             $favouriteWord = new FavouriteWord();
             $favouriteWord->IdUser = $idUser;
@@ -59,6 +64,11 @@ class FavouriteWordController extends Controller
             $favouriteWord->save();
             array_push($res,$favouriteWord);
         }
+        $res = [
+            'favouriteWords' => $favouriteWords,
+            'status'=> 'success',
+            'message' => 'Create favouriteWord successfully'
+        ];
         return $res;
     }
 

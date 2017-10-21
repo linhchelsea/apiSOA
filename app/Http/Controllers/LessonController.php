@@ -14,7 +14,13 @@ class LessonController extends Controller
      */
     public function index()
     {
-        return Lesson::all();
+        $lessons = Lesson::all();;
+        $res = [
+            'lessons' => $lessons,
+            'status' => 'success',
+            'message' => 'get list'
+        ];
+        return $res;
     }
 
 

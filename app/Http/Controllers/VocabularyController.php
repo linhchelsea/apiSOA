@@ -14,7 +14,12 @@ class VocabularyController extends Controller
      */
     public function index()
     {
-        return Vocabulary::all();
+        $res = [
+            'vocabularies' => Vocabulary::all(),
+            'status' => 'success',
+            'message' => 'get list'
+        ];
+        return $res;
     }
 
     public function show($id)
