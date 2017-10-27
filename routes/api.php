@@ -53,3 +53,6 @@ Route::put('memorize/{id}','MemorizeController@update');
 Route::delete('memorize/{id}','MemorizeController@destroy');
 Route::get('getListMemorize/{idUser}','MemorizeController@getListMemorize');
 
+
+Route::post('login','UserController@postLogin');
+Route::get('logout','UserController@logout');

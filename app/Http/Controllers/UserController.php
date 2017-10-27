@@ -7,10 +7,19 @@ use App\Memorize;
 use App\User;
 use App\UserLearnt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Psy\Util\Json;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
+    private $user;
+
+    public function __construct(User $user){
+        $this->user = $user;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,15 +44,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if(self::checkUsername($request->username)==null){
+        if(self::checkEmail($request->email)==null){
             $user = new User();
-            $user->Username = $request->username;
-            $user->Password = $request->password;
-            $user->Password = bcrypt($user->password);
-            $user->Fullname = $request->fullname;
-            $user->Email = $request->email;
-            $user->Level = $request->level;
-            $user->TotalPoint = 0;
+            $user->name = $request->name;
+            $user->password = $request->password;
+            $user->password = bcrypt($user->password);
+            $user->email = $request->email;
+            $user->level = 1;
             $user->save();
             $res = [
                 'user' => $user,
@@ -52,7 +59,11 @@ class UserController extends Controller
             ];
             return $res;
         }
-        return response()->json('Username was existed');
+        $res = [
+            'status' => 'fail',
+            'message' => 'Email was existed'
+        ];
+        return $res;
     }
 
     /**
@@ -86,11 +97,10 @@ class UserController extends Controller
         $user = User::find($id);
         if($user != null){
             if(''!= $request->password){
-                $user->Password = bcrypt($request->password);
+                $user->password = bcrypt($request->password);
             }
-            $user->Fullname = $request->fullname;
-            $user->Email = $request->email;
-            $user->Level = $request->level;
+            $user->name = $request->name;
+            $user->level = $request->level;
             $user->save();
             $res = [
                 'user' => $user,
@@ -141,8 +151,34 @@ class UserController extends Controller
         }
         return $res;
     }
-    public function checkUsername($username){
-        $user = User::where('Username','=',$username)->first();
+    public function checkEmail($email){
+        $user = User::where('email','=',$email)->first();
         return $user;
+    }
+    public function postLogin(Request $request){
+        $login = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
+        if(Auth::attempt($login)){
+            session_start();
+            Session::put('userLogin', Auth::user());
+            return response()->json([
+                'status' => 'Success',
+//                'token' => Auth::user()->getRememberToken()
+                'token' => Session::get('userLogin')
+            ]);
+        }
+        return response()->json([
+            'status' => 'fail'
+        ]);
+    }
+    public function logout(Request $request){
+        return $request->url('/logout');
+        $res = [
+          'status' => 'success',
+          'message' => 'Logout successfully'
+        ];
+        return response()->json($res);
     }
 }
