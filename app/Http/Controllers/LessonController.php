@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Lesson;
+use App\User;
+use App\UserLearnt;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller
@@ -12,14 +14,42 @@ class LessonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $lessons = Lesson::all();;
-        $res = [
-            'lessons' => $lessons,
-            'status' => 'success',
-            'message' => 'get list'
-        ];
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+                    ->first();
+        if($user != null){
+            //lay danh sach lesson da va dang hoc cua user
+            $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
+            $arr_IdLessons = array();
+            $arr_LessonsPoint = array();
+            foreach ($userLearnts as $userLearnt){
+                array_push($arr_IdLessons, $userLearnt->IdLesson);
+                array_push($arr_LessonsPoint, $userLearnt->LessonPoint);
+            }
+            $lessons = Lesson::all();;
+            foreach ($lessons as $lesson){
+                $lesson->isLock = true;
+                $key = array_search($lesson->Id, $arr_IdLessons);
+                if($key !== false){
+                    $lesson->isLock = false;
+                    //lay diem cua bai hoc
+                    $lesson->Point = $arr_LessonsPoint[$key];
+                }
+            }
+            $res = [
+                'lessons' => $lessons,
+                'status' => 'success',
+                'message' => 'get list'
+            ];
+        }else{
+            $res = [
+                'status' => 'fail',
+                'message' => 'Can not find user'
+            ];
+        }
+
         return $res;
     }
 
