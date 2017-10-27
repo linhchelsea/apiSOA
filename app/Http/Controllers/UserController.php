@@ -52,6 +52,8 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->level = 1;
             $user->save();
+            //Them bai 1-2-3 trong user learnt
+            self::createFirstThreeLessons($user);
             $res = [
                 'user' => $user,
                 'status' => 'success',
@@ -72,9 +74,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $user = User::find($id);
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
         if($user != null){
             $res = ['user' => $user,'status'=> 'success', 'message' => 'Find successfully'];
         }else{
@@ -92,9 +96,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = User::find($id);
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
         if($user != null){
             if(''!= $request->password){
                 $user->password = bcrypt($request->password);
@@ -123,19 +129,21 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $user = User::find($id);
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
         if($user != null){
             //xoa het cac thong tin lien quan toi user
             //UserLearnt
-            UserLearnt::where('IdUser','=',$id)
+            UserLearnt::where('IdUser','=',$user->id)
                                 ->delete();
             //Memorize
-            Memorize::where('IdUser','=',$id)
+            Memorize::where('IdUser','=',$user->id)
                                 ->delete();
             //Favourite
-            FavouriteWord::where('IdUser','=',$id)
+            FavouriteWord::where('IdUser','=',$user->id)
                                 ->delete();
             $user->delete();
             $res = [
@@ -180,5 +188,24 @@ class UserController extends Controller
           'message' => 'Logout successfully'
         ];
         return response()->json($res);
+    }
+    public static function createFirstThreeLessons($user){
+        $userLearnt1 = new UserLearnt();
+        $userLearnt1->IdUser = $user->id;
+        $userLearnt1->IdLesson = 1;
+        $userLearnt1->LessonPoint = 0;
+        $userLearnt1->save();
+        //==================================
+        $userLearnt2 = new UserLearnt();
+        $userLearnt2->IdUser = $user->id;
+        $userLearnt2->IdLesson = 2;
+        $userLearnt2->LessonPoint = 0;
+        $userLearnt2->save();
+        //==============================
+        $userLearnt3 = new UserLearnt();
+        $userLearnt3->IdUser = $user->id;
+        $userLearnt3->IdLesson = 3;
+        $userLearnt3->LessonPoint = 0;
+        $userLearnt3->save();
     }
 }
