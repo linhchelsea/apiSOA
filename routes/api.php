@@ -31,7 +31,7 @@ Route::put('userUpdate','UserController@update');
 Route::delete('userDelete','UserController@delete');
 
 
-Route::post('userLearnt/{idUser}/{idLesson}/{point}','UserLearntController@updatePoint');
+Route::post('userLearnt','UserLearntController@updatePoint');
 
 Route::post('sentence','SentenceController@index');
 Route::post('sentence/{id}','SentenceController@show');

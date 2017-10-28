@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\FavouriteWord;
+use App\Lesson;
 use App\Memorize;
 use App\User;
 use App\UserLearnt;
@@ -54,7 +55,7 @@ class UserController extends Controller
             $user->setRememberToken(self::randomRememberToken());
             $user->save();
             //Them bai 1-2-3 trong user learnt
-            self::createFirstThreeLessons($user);
+            self::createFirstThreeLessons($user->id);
             $res = [
                 'user' => $user,
                 'status' => 'success',
@@ -170,8 +171,6 @@ class UserController extends Controller
             'password' => $request->password
         ];
         if(Auth::attempt($login)){
-            session_start();
-            Session::put('userLogin', Auth::user());
             return response()->json([
                 'status' => 'Success',
                 'token' => Auth::user()->getRememberToken()
@@ -200,24 +199,19 @@ class UserController extends Controller
         }
         return response()->json($res);
     }
-    public static function createFirstThreeLessons($user){
-        $userLearnt1 = new UserLearnt();
-        $userLearnt1->IdUser = $user->id;
-        $userLearnt1->IdLesson = 1;
-        $userLearnt1->LessonPoint = 0;
-        $userLearnt1->save();
-        //==================================
-        $userLearnt2 = new UserLearnt();
-        $userLearnt2->IdUser = $user->id;
-        $userLearnt2->IdLesson = 2;
-        $userLearnt2->LessonPoint = 0;
-        $userLearnt2->save();
-        //==============================
-        $userLearnt3 = new UserLearnt();
-        $userLearnt3->IdUser = $user->id;
-        $userLearnt3->IdLesson = 3;
-        $userLearnt3->LessonPoint = 0;
-        $userLearnt3->save();
+    public static function createFirstThreeLessons($idUser){
+        //lay 3 bai dau tien trong danh sach lesson
+        $Lessons = Lesson::where('Id','<>',0)
+                            ->orderBy('Id','ASC')
+                            ->limit(3)
+                            ->get();
+        foreach ($Lessons as $Lesson){
+            $userLearnt = new UserLearnt();
+            $userLearnt->IdUser = $idUser;
+            $userLearnt->IdLesson = $Lesson->Id;
+            $userLearnt->LessonPoint = 0;
+            $userLearnt->save();
+        }
     }
     public static function randomRememberToken(){
         $arrCharacters = ['a','b','c','d','e','f','g','h','i','j','k','l','m'
