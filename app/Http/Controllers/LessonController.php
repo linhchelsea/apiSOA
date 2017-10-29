@@ -19,7 +19,7 @@ class LessonController extends Controller
         $remember_token = $request->remember_token;
         $user = User::where('remember_token','=',$remember_token)
                     ->first();
-        dd($remember_token + " --- " + $user);
+        dd($remember_token);
         if($user != null){
             //lay danh sach lesson da va dang hoc cua user
             $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
