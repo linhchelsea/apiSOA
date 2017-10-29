@@ -29,7 +29,6 @@ class LessonController extends Controller
                 array_push($arr_IdLessons, $userLearnt->IdLesson);
                 array_push($arr_LessonsPoint, $userLearnt->LessonPoint);
             }
-            dd($arr_IdLessons);
             $lessons = Lesson::all();;
             foreach ($lessons as $lesson){
                 $lesson->isLock = true;
