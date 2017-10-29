@@ -172,7 +172,7 @@ class UserController extends Controller
         ];
         if(Auth::attempt($login)){
             return response()->json([
-                'status' => 'Success',
+                'status' => 'success',
                 'token' => Auth::user()->getRememberToken()
             ]);
         }
