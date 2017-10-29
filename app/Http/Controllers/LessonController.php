@@ -19,7 +19,6 @@ class LessonController extends Controller
         $remember_token = $request->remember_token;
         $user = User::where('remember_token','=',$remember_token)
                     ->first();
-        dd($user);
         if($user != null){
             //lay danh sach lesson da va dang hoc cua user
             $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
@@ -29,6 +28,7 @@ class LessonController extends Controller
                 array_push($arr_IdLessons, $userLearnt->IdLesson);
                 array_push($arr_LessonsPoint, $userLearnt->LessonPoint);
             }
+            dd($arr_IdLessons);
             $lessons = Lesson::all();;
             foreach ($lessons as $lesson){
                 $lesson->isLock = true;
