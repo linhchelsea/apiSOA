@@ -21,16 +21,8 @@ class LessonController extends Controller
         $user = User::where('remember_token','=',$remember_token)
                     ->first();
         if($user != null){
-            dd($user->id);
             //lay danh sach lesson da va dang hoc cua user
-//            $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
-
-            try {
-                $userLearnts = UserLearnt::where('IdUser','=',7)->get();
-            } catch(\Illuminate\Database\QueryException $ex){
-                dd($ex->getMessage());
-            }
-            dd($userLearnts);
+            $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
             $arr_IdLessons = array();
             $arr_LessonsPoint = array();
             foreach ($userLearnts as $userLearnt){
