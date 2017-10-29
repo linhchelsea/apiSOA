@@ -25,7 +25,7 @@ class LessonController extends Controller
 //            $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
 
             try {
-                $userLearnts = UserLearnt::get();
+                $userLearnts = UserLearnt::where('IdLesson','=',7)->get();
             } catch(\Illuminate\Database\QueryException $ex){
                 dd($ex->getMessage());
             }
