@@ -21,6 +21,7 @@ class LessonController extends Controller
         $user = User::where('remember_token','=',$remember_token)
                     ->first();
         if($user != null){
+            dd($user->id);
             //lay danh sach lesson da va dang hoc cua user
 //            $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
 
