@@ -6,6 +6,7 @@ use App\Lesson;
 use App\User;
 use App\UserLearnt;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class LessonController extends Controller
 {
@@ -21,8 +22,13 @@ class LessonController extends Controller
                     ->first();
         if($user != null){
             //lay danh sach lesson da va dang hoc cua user
-            $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
-            dd($userLearnts);
+
+            try {
+                $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
+            } catch(\Illuminate\Database\QueryException $ex){
+                dd($ex->getMessage());
+            }
+            dd("eo loi");
             $arr_IdLessons = array();
             $arr_LessonsPoint = array();
             foreach ($userLearnts as $userLearnt){
