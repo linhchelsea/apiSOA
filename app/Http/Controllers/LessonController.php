@@ -22,6 +22,7 @@ class LessonController extends Controller
         if($user != null){
             //lay danh sach lesson da va dang hoc cua user
             $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
+            dd($user->id + " --- " + $userLearnts);
             $arr_IdLessons = array();
             $arr_LessonsPoint = array();
             foreach ($userLearnts as $userLearnt){
