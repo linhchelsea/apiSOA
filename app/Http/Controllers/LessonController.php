@@ -22,13 +22,14 @@ class LessonController extends Controller
                     ->first();
         if($user != null){
             //lay danh sach lesson da va dang hoc cua user
+//            $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
 
             try {
-                $userLearnts = UserLearnt::where('IdUser','=',$user->id)->get();
+                $userLearnts = UserLearnt::get();
             } catch(\Illuminate\Database\QueryException $ex){
                 dd($ex->getMessage());
             }
-            dd("eo loi");
+            dd($userLearnts);
             $arr_IdLessons = array();
             $arr_LessonsPoint = array();
             foreach ($userLearnts as $userLearnt){
