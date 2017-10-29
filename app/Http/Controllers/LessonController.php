@@ -32,7 +32,7 @@ class LessonController extends Controller
             foreach ($lessons as $lesson){
                 $lesson->isLock = true;
                 $key = array_search($lesson->Id, $arr_IdLessons);
-                if($key){
+                if($key !== false){
                     $lesson->isLock = false;
                     //lay diem cua bai hoc
                     $lesson->Point = $arr_LessonsPoint[$key];
