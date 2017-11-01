@@ -40,11 +40,10 @@ Route::put('sentence/{id}','SentenceController@update');
 Route::delete('sentence/{id}','SentenceController@delete');
 
 Route::post('favourite','FavouriteWordController@index');
-Route::post('favourite/{id}/{idVocabulary}','FavouriteWordController@show');
-Route::post('favourite','FavouriteWordController@store');
-Route::put('favourite/{idUser}','FavouriteWordController@update');
-Route::delete('favourite/{id}','FavouriteWordController@delete');
-Route::get('favouriteByUser/{idUser}','FavouriteWordController@favouriteByUser');
+Route::post('favouriteShow','FavouriteWordController@show');
+Route::post('favouriteStore','FavouriteWordController@store');
+Route::delete('favouriteDelete','FavouriteWordController@destroy');
+Route::post('favouriteByUser','FavouriteWordController@favouriteByUser');
 
 Route::post('memorize','MemorizeController@index');
 Route::post('memorize/{id}','MemorizeController@show');

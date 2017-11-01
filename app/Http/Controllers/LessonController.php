@@ -26,7 +26,12 @@ class LessonController extends Controller
             $arr_LessonsPoint = array();
             foreach ($userLearnts as $userLearnt){
                 array_push($arr_IdLessons, $userLearnt->IdLesson);
-                array_push($arr_LessonsPoint, $userLearnt->LessonPoint);
+                $point = [
+                    'VocaPoint' => $userLearnt->VocaPoint,
+                    'ListenPoint' => $userLearnt->ListenPoint,
+                    'RememberPoint' => $userLearnt->RememberPoint
+                ];
+                array_push($arr_LessonsPoint, $point);
             }
             $lessons = Lesson::all();;
             foreach ($lessons as $lesson){
