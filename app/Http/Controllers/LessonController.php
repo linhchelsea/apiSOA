@@ -78,5 +78,5 @@ class LessonController extends Controller
         }
         return $res;
     }
-    
+
 }
