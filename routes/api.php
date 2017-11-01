@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('lesson', 'LessonController@index');
-Route::post('lesson/{id}', 'LessonController@show');
+Route::post('lessonShow', 'LessonController@show');
 
 Route::post('vocabulary', 'VocabularyController@index');
 Route::post('vocabulary/{id}', 'VocabularyController@show');
