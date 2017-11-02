@@ -59,6 +59,9 @@ class UserLearntController extends Controller
                 if($beCanOpenNextThreeLessons && !$isFullLesson){
                     //mo 3 bai hoc tiep theo
                     self::OpenNextThreeLessons($user->id);
+                    //tang level
+                    $user->level++;
+                    $user->save();
                 }
                 $res = [
                     'userLearnt' => $userLearnt,
