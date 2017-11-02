@@ -209,7 +209,9 @@ class UserController extends Controller
             $userLearnt = new UserLearnt();
             $userLearnt->IdUser = $idUser;
             $userLearnt->IdLesson = $Lesson->Id;
-            $userLearnt->LessonPoint = 0;
+            $userLearnt->VocaPoint = 0;
+            $userLearnt->ListenPoint = 0;
+            $userLearnt->RememberPoint = 0;
             $userLearnt->save();
         }
     }
