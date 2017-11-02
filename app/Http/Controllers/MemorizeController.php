@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Memorize;
+use App\User;
+use App\Vocabulary;
 use Illuminate\Http\Request;
 
 class MemorizeController extends Controller
@@ -23,16 +25,6 @@ class MemorizeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -40,8 +32,23 @@ class MemorizeController extends Controller
      */
     public function store(Request $request)
     {
-        $idUser = $request->IdUser;
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
+        if($user == null){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'User is not existed!'
+            ]);
+        }
         $idVocabulary = $request->IdVocabulary;
+        $vocabulary = Vocabulary::find($idVocabulary);
+        if($vocabulary == null){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Word is not existed!'
+            ]);
+        }
         $content = $request->Content;
         if('' == $content){
             $res = [
@@ -50,7 +57,7 @@ class MemorizeController extends Controller
             ];
         }else{
             $memorize = new Memorize();
-            $memorize->IdUser = $idUser;
+            $memorize->IdUser = $user->id;
             $memorize->IdVocabulary = $idVocabulary;
             $memorize->Content = $content;
             $memorize->save();
@@ -70,8 +77,9 @@ class MemorizeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
+        $id = $request->id;
         $memorize = Memorize::find($id);
         if($memorize != null){
             $res = ['memorize' => $memorize,'status'=> 'success', 'message' => 'Find successfully'];
@@ -82,16 +90,7 @@ class MemorizeController extends Controller
         return $res;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -100,11 +99,19 @@ class MemorizeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $id = $request->id;
+        $content = $request->Content;
+        if($content == ''){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Blank Content!'
+            ]);
+        }
         $memorize = Memorize::find($id);
         if($memorize != null){
-            $memorize->Content = $request->Content;
+            $memorize->Content = $content;
             $memorize->save();
             $res = [
                 'memorize' => $memorize,
@@ -114,7 +121,7 @@ class MemorizeController extends Controller
         }else{
             $res = [
                 'status' => 'fail',
-                'message' => 'Can not find'
+                'message' => 'This memorization is not exist!'
             ];
         }
         return $res;
@@ -126,8 +133,9 @@ class MemorizeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->id;
         $memorize = Memorize::find($id);
         if($memorize != null){
             $memorize->delete();
@@ -139,8 +147,16 @@ class MemorizeController extends Controller
         return $res;
     }
     public function getListMemorize(Request $request){
-        $idUser = $request->idUser;
-        $memorizes = Memorize::where('IdUser','=',$idUser)
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
+        if($user == null){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'User is not existed!'
+            ]);
+        }
+        $memorizes = Memorize::where('IdUser','=',$user->id)
                                 ->get();
         if (count($memorizes) > 0){
             $res = [
