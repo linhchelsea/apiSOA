@@ -14,6 +14,7 @@ class UserLearntController extends Controller
         $remember_token = $request->remember_token;
         $idLesson = $request->idLesson;
         $point = $request->point;
+        $type = $request->type;
         if($point > 5){
             return response()->json([
                 'status' => 'fail',
@@ -28,10 +29,26 @@ class UserLearntController extends Controller
                 ->where('IdLesson','=',$idLesson)
                 ->first();
             if($userLearnt != null){
-                if($userLearnt->LessonPoint < $point){
+                $update = array();
+                switch ($type){
+                    case 'voca':
+                        $update = ['VocaPoint' => $point];
+
+                        break;
+                    case 'listen':
+                        $update = ['ListenPoint' => $point];
+                        break;
+                    case 'remember':
+                        $update = ['RememberPoint' => $point];
+                        break;
+                }
+                $checkPoint = $userLearnt->VocaPoint < $point
+                            || $userLearnt->ListenPoint < $point
+                            || $userLearnt->RememberPoint < $point;
+                if($checkPoint){
                     $userLearnt = UserLearnt::where('IdUser','=',$user->id)
                         ->where('IdLesson','=',$idLesson)
-                        ->update(['LessonPoint' => $point]);
+                        ->update($update);
                 }
                 $userLearnt = UserLearnt::where('IdUser','=',$user->id)
                     ->where('IdLesson','=',$idLesson)
@@ -75,7 +92,10 @@ class UserLearntController extends Controller
        $userLearnts = self::getThreeLessons($idUser);
        $open = true;
        foreach ($userLearnts as $userLearnt){
-           if ($userLearnt->LessonPoint < 4 ) $open = false;
+           $condition = $userLearnt->VocaPoint < 4
+                     || $userLearnt->ListenPoint < 4
+                     || $userLearnt->RememberPoint < 4;
+           if ($condition) $open = false;
        }
        return $open;
    }
@@ -106,7 +126,9 @@ class UserLearntController extends Controller
            $userLearnt = new UserLearnt();
            $userLearnt->IdUser = $idUser;
            $userLearnt->IdLesson = $id;
-           $userLearnt->LessonPoint = 0;
+           $userLearnt->VocaPoint = 0;
+           $userLearnt->ListenPoint = 0;
+           $userLearnt->RememberPoint = 0;
            $userLearnt->save();
        }
     }

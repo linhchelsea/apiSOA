@@ -28,16 +28,6 @@ class FavouriteWordController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -45,24 +35,27 @@ class FavouriteWordController extends Controller
      */
     public function store(Request $request)
     {
-        $data = json_decode($request->data);
-        $idUser = intval($data->iduser);
-        $user = User::find($idUser);
+        $remember_token = $request->remember_token;
+        $arr_idVoca = $request->idVocabularies;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
         if($user == null ){
             return [
                 'status' => 'fail',
                 'message' => 'User not found'
             ];
         }
-        $arr_idVoca = $data->idvoca;
         //them vao bang
         $favouriteWords = array();
         for($i = 0; $i< count($arr_idVoca); $i++){
-            $favouriteWord = new FavouriteWord();
-            $favouriteWord->IdUser = $idUser;
-            $favouriteWord->IdVocabulary = intval($arr_idVoca[$i]);
-            $favouriteWord->save();
-            array_push($res,$favouriteWord);
+            $idVocabulary = intval($arr_idVoca[$i]);
+            if(self::isNotExistWord($user->id,$idVocabulary)){
+                $favouriteWord = new FavouriteWord();
+                $favouriteWord->IdUser = $user->id;
+                $favouriteWord->IdVocabulary = $idVocabulary;
+                $favouriteWord->save();
+                array_push($favouriteWords,$favouriteWord);
+            }
         }
         $res = [
             'favouriteWords' => $favouriteWords,
@@ -78,11 +71,15 @@ class FavouriteWordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($idUser,$idVocabulary)
+    public function show(Request $request)
     {
-        $favouriteWord = FavouriteWord::join('Users','FavoriteWords.IdUser','=','Users.Id')
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
+        $idVocabulary = $request->idVocabulary;
+        $favouriteWord = FavouriteWord::join('users','FavoriteWords.IdUser','=','users.id')
             ->join('Vocabulary','FavoriteWords.IdVocabulary','=','Vocabulary.Id')
-            ->where('FavoriteWords.IdUser','=',$idUser)
+            ->where('FavoriteWords.IdUser','=',$user->id)
             ->where('FavoriteWords.IdVocabulary','=',$idVocabulary)
             ->first();
         if($favouriteWord != null){
@@ -94,28 +91,6 @@ class FavouriteWordController extends Controller
         return $res;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -123,29 +98,61 @@ class FavouriteWordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
+        $idVocabulary = $request->idVocabulary;
+        $favoutireWord = FavouriteWord::where('IdUser','=',$user->id)
+                                        ->where('IdVocabulary','=',$idVocabulary)
+                                        ->delete();
+        if($favoutireWord){
+            $res = [
+                'status' => 'success',
+                'message' => 'This word was removed'
+            ];
+        }else{
+            $res = [
+                'status' => 'fail',
+                'message' => 'Can not find your word'
+            ];
+        }
+
+        return $res;
     }
 
     public function favouriteByUser(Request $request){
-        $idUser = $request->idUser;
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
         $favouriteWords = FavouriteWord::join('Users','FavoriteWords.IdUser','=','Users.Id')
                         ->join('Vocabulary','FavoriteWords.IdVocabulary','=','Vocabulary.Id')
-                        ->where('IdUser','=',$idUser)
+                        ->where('IdUser','=',$user->id)
                         ->get();
         if (count($favouriteWords) > 0){
             $res = [
                 'favouriteWords' => $favouriteWords,
                 'status' => 'success',
-                'message' => 'Finded'
+                'message' => 'Find your words successfully'
             ];
         }else{
             $res = [
                 'status' => 'fail',
-                'message' => 'List is Empty'
+                'message' => 'There is no favourite words'
             ];
         }
         return $res;
+    }
+    public function isNotExistWord($idUser, $idVocabulary){
+        $favourite = FavouriteWord::where('IdUser','=',$idUser)
+            ->where('IdVocabulary','=',$idVocabulary)
+            ->first();
+
+        if($favourite != null){
+            return false;
+        }
+
+        return true;
     }
 }
