@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Sentence;
 use Illuminate\Http\Request;
+use Psy\Test\Exception\RuntimeExceptionTest;
 
 class SentenceController extends Controller
 {
@@ -20,16 +21,6 @@ class SentenceController extends Controller
             'message' => 'get list'
         ];
         return $res;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -58,8 +49,9 @@ class SentenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
+        $id = $request->id;
         $sentence = Sentence::find($id);
         if($sentence != null){
             $res = ['sentence' => $sentence,'status'=> 'success', 'message' => 'Find successfully'];
@@ -71,25 +63,15 @@ class SentenceController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $id = $request->id;
         $sentence = Sentence::find($id);
         if($sentence != null){
             $sentence->EngSentence = $request->EngSentence;
@@ -127,8 +109,9 @@ class SentenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function delete(Request $request)
     {
+        $id = $request->id;
         $sentence = Sentence::find($id);
         if($sentence != null){
             $sentence->delete();

@@ -33,11 +33,11 @@ Route::delete('userDelete','UserController@delete');
 
 Route::post('userLearnt','UserLearntController@updatePoint');
 
-Route::post('sentence','SentenceController@index');
-Route::post('sentence/{id}','SentenceController@show');
-Route::post('sentence','SentenceController@store');
-Route::put('sentence/{id}','SentenceController@update');
-Route::delete('sentence/{id}','SentenceController@delete');
+Route::post('sentenceList','SentenceController@index');
+Route::post('sentenceShow','SentenceController@show');
+Route::post('sentenceStore','SentenceController@store');
+Route::put('sentenceUpdate','SentenceController@update');
+Route::delete('sentenceDelete','SentenceController@delete');
 
 Route::post('favourite','FavouriteWordController@index');
 Route::post('favouriteShow','FavouriteWordController@show');
@@ -45,12 +45,12 @@ Route::post('favouriteStore','FavouriteWordController@store');
 Route::delete('favouriteDelete','FavouriteWordController@destroy');
 Route::post('favouriteByUser','FavouriteWordController@favouriteByUser');
 
-Route::post('memorize','MemorizeController@index');
-Route::post('memorize/{id}','MemorizeController@show');
-Route::post('memorize','MemorizeController@store');
-Route::put('memorize/{id}','MemorizeController@update');
-Route::delete('memorize/{id}','MemorizeController@destroy');
-Route::post('getListMemorize/{idUser}','MemorizeController@getListMemorize');
+Route::post('memorizeList','MemorizeController@index');
+Route::post('memorizeShow','MemorizeController@show');
+Route::post('memorizeStore','MemorizeController@store');
+Route::put('memorizeUpdate','MemorizeController@update');
+Route::delete('memorizeDelete','MemorizeController@destroy');
+Route::post('memorizeByUser','MemorizeController@getListMemorize');
 
 
 Route::post('login','UserController@postLogin');
