@@ -52,7 +52,7 @@ class LessonController extends Controller
         }else{
             $res = [
                 'status' => 'fail',
-                'message' => 'Can not find user'
+                'message' => 'User not found'
             ];
         }
 
