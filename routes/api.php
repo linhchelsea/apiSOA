@@ -20,8 +20,8 @@ Route::post('lesson', 'LessonController@index');
 Route::post('lessonShow', 'LessonController@show');
 
 Route::post('vocabulary', 'VocabularyController@index');
-Route::post('vocabulary/{id}', 'VocabularyController@show');
-Route::post('vocabularyByLesson/{NumberLesson}', 'VocabularyController@VocaLesson');
+Route::post('vocabularyShow', 'VocabularyController@show');
+Route::post('vocabularyByLesson', 'VocabularyController@VocaLesson');
 
 
 Route::post('user','UserController@index');

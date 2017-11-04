@@ -22,8 +22,9 @@ class VocabularyController extends Controller
         return $res;
     }
 
-    public function show($id)
+    public function show(Request $request)
     {
+        $id = $request->id;
         $vocabulary = Vocabulary::find($id);
         if($vocabulary != null){
             $res = [

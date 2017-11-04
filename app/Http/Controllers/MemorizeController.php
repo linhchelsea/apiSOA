@@ -148,6 +148,7 @@ class MemorizeController extends Controller
     }
     public function getListMemorize(Request $request){
         $remember_token = $request->remember_token;
+        $idVocabulary = $request->idVocabulary;
         $user = User::where('remember_token','=',$remember_token)
             ->first();
         if($user == null){
@@ -157,6 +158,8 @@ class MemorizeController extends Controller
             ]);
         }
         $memorizes = Memorize::where('IdUser','=',$user->id)
+                                ->where('IdVocabulary','=',$idVocabulary)
+                                ->select('Content')
                                 ->get();
         if (count($memorizes) > 0){
             $res = [

@@ -76,6 +76,12 @@ class FavouriteWordController extends Controller
         $remember_token = $request->remember_token;
         $user = User::where('remember_token','=',$remember_token)
             ->first();
+        if($user == null ){
+            return [
+                'status' => 'fail',
+                'message' => 'User not found'
+            ];
+        }
         $idVocabulary = $request->idVocabulary;
         $favouriteWord = FavouriteWord::join('users','FavoriteWords.IdUser','=','users.id')
             ->join('Vocabulary','FavoriteWords.IdVocabulary','=','Vocabulary.Id')
@@ -103,6 +109,12 @@ class FavouriteWordController extends Controller
         $remember_token = $request->remember_token;
         $user = User::where('remember_token','=',$remember_token)
             ->first();
+        if($user == null ){
+            return [
+                'status' => 'fail',
+                'message' => 'User not found'
+            ];
+        }
         $idVocabulary = $request->idVocabulary;
         $favoutireWord = FavouriteWord::where('IdUser','=',$user->id)
                                         ->where('IdVocabulary','=',$idVocabulary)
@@ -126,9 +138,16 @@ class FavouriteWordController extends Controller
         $remember_token = $request->remember_token;
         $user = User::where('remember_token','=',$remember_token)
             ->first();
-        $favouriteWords = FavouriteWord::join('Users','FavoriteWords.IdUser','=','Users.Id')
+        if($user == null ){
+            return [
+                'status' => 'fail',
+                'message' => 'User not found'
+            ];
+        }
+        $favouriteWords = FavouriteWord::join('users','FavoriteWords.IdUser','=','users.id')
                         ->join('Vocabulary','FavoriteWords.IdVocabulary','=','Vocabulary.Id')
                         ->where('IdUser','=',$user->id)
+                        ->select('Vocabulary.*')
                         ->get();
         if (count($favouriteWords) > 0){
             $res = [
