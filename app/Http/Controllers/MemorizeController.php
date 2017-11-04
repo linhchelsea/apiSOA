@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Memorize;
 use App\User;
+use App\UserLearnt;
 use App\Vocabulary;
 use Illuminate\Http\Request;
 

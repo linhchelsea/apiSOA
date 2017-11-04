@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Memorize;
 use App\User;
+use App\UserLearnt;
 use App\Vocabulary;
 use Illuminate\Http\Request;
 
@@ -53,6 +54,15 @@ class VocabularyController extends Controller
             return response()->json([
                 'status' => 'fail',
                 'message' => 'User is not existed!'
+            ]);
+        }
+        $userLearnt = UserLearnt::where('IdUser','=',$user->id)
+                                ->where('IdLesson','=',$NumberLesson)
+                                ->first();
+        if($userLearnt == null){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'This lesson is blocked to you'
             ]);
         }
         $vocabularies = Vocabulary::where('LessonNumber','=',$NumberLesson)->get();
