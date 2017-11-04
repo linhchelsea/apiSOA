@@ -159,7 +159,7 @@ class MemorizeController extends Controller
         }
         $memorizes = Memorize::where('IdUser','=',$user->id)
                                 ->where('IdVocabulary','=',$idVocabulary)
-                                ->select('id','Content')
+                                ->select('Id','Content')
                                 ->get();
         if (count($memorizes) > 0){
             $res = [

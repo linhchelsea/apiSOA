@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Memorize;
+use App\User;
 use App\Vocabulary;
 use Illuminate\Http\Request;
 
@@ -44,8 +46,25 @@ class VocabularyController extends Controller
 
     public function VocaLesson(Request $request){
         $NumberLesson = $request->NumberLesson;
+        $remember_token = $request->remember_token;
+        $user = User::where('remember_token','=',$remember_token)
+            ->first();
+        if($user == null){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'User is not existed!'
+            ]);
+        }
         $vocabularies = Vocabulary::where('LessonNumber','=',$NumberLesson)->get();
-
+        foreach ($vocabularies as $vocabulary){
+            $memorizes = Memorize::where('IdUser','=',$user->id)
+                                    ->where('IdVocabulary','=',$vocabulary->Id)
+                                    ->select('Id','Content')
+                                    ->get();
+            if(count($memorizes) > 0){
+                $vocabulary->memorizes = $memorizes;
+            }
+        }
         if(count($vocabularies) > 0){
             $res = [
                 'vocabularies' => $vocabularies,
