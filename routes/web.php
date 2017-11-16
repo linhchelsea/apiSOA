@@ -11,8 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix'=> 'admin','namespace'=>'BackEnd'],function (){
+    Route::resource('users','AdminController');
+    Route::resource('lessons','LessonController');
+    Route::resource('sentences','SentenceController');
+    Route::resource('user-learnt','UserLearntController');
+    Route::resource('vocabularies','VocabularyController');
 });
 
 Auth::routes();
