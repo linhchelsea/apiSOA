@@ -42,7 +42,7 @@ class MemorizeController extends Controller
                 'message' => 'User is not existed!'
             ]);
         }
-        $idVocabulary = $request->IdVocabulary;
+        $idVocabulary = $request->idVocabulary;
         $vocabulary = Vocabulary::find($idVocabulary);
         if($vocabulary == null){
             return response()->json([

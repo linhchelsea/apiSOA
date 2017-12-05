@@ -28,32 +28,29 @@
                                 <tr>
                                     <th class="text-center">Fullname</th>
                                     <th class="text-center">Email</th>
-                                    <th class="text-center">Position</th>
+                                    <th class="text-center">Level</th>
                                     <th class="text-center" colspan="3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {{--@if(count($users) == 0)--}}
+                            @if(count($users) == 0)
                                 <tr>
                                     <td colspan="6" class="text-center text-blue">
                                         <h4>NO USER TO SHOW</h4>
                                     </td>
                                 </tr>
-                            {{--@else--}}
-{{--                                @foreach($users as $user)--}}
+                            @else
+                                @foreach($users as $user)
                                     <tr>
-                                        <td class="text-center">name</td>
-                                        <td class="text-center">email</td>
+                                        <td class="text-center">{{$user->name}}</td>
+                                        <td class="text-center">{{$user->email}}</td>
+                                        <td class="text-center">{{$user->level}}</td>
                                         <td class="text-center">
-                                            Employee
-                                        </td>
-                                        <td class="text-center">
-                                            <form method="POST" action="{{--{{ route('users.destroy',$user->id) }}--}}" accept-charset="UTF-8">
+                                            <form method="POST" action="{{ route('users.destroy',$user->id) }}" accept-charset="UTF-8">
                                                 <input name="_method" type="hidden" value="DELETE">
                                                 {{ csrf_field() }}
                                                 <div class='btn-group'>
-                                                    <a href="{{--{{ route('users.show', $user->id) }}--}}" class='btn btn-primary'>Detail</a>
-                                                    <a href="{{--{{ route('users.edit', $user->id) }}--}}" class='btn btn-warning'>Edit</a>
+                                                    <a href="{{ route('users.edit', $user->id) }}" class='btn btn-warning'>Edit</a>
                                                     <button type="submit" class="btn btn-danger" onclick="return confirm(&#039;You want to delete this user?&#039;)">
                                                         Delete
                                                     </button>
@@ -61,14 +58,14 @@
                                             </form>
                                         </td>
                                     </tr>
-                                {{--@endforeach--}}
-                            {{--@endif--}}
+                                @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>
                     <div class="box-footer clearfix">
                         <div class="pagination-sm no-margin pull-right">
-                            {{--{{ $users->links() }}--}}
+                            {{ $users->links() }}
                         </div>
                     </div>
                 </div>

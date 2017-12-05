@@ -21,19 +21,19 @@
                     <div class="alert alert-danger"><p><strong>{{ Session::get('fail') }}</strong></p></div>
                 @endif
                 <div class="row">
-                    <form method="POST" action="{{--{{ route('users.update',$user->id) }}--}}" accept-charset="UTF-8" id="user_update" class="userUpdateForm" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('users.update',$user->id) }}" accept-charset="UTF-8" id="user_update" class="userUpdateForm" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="_method" value="PUT">
                         <div class="form-group">
                             <!-- Email Field -->
                             <div class="col-sm-6">
                                 <label for="email">Email</label>
-                                <p class="form-control" id="email">email</p>
+                                <p class="form-control" id="email">{{$user->email}}</p>
                             </div>
                             <!-- Fullname Field -->
                             <div class="col-sm-6">
                                 <label for="fullname">Full name</label>
-                                <input class="form-control" name="fullname" type="text" id="fullname" value="name">
+                                <input class="form-control" name="fullname" type="text" id="fullname" value="{{$user->name}}">
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -50,16 +50,6 @@
                                 <input class="form-control" name="password_confirmation" type="password" id="password_confirmation" value="">
                             </div>
                             
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="form-group">
-                            <!-- Avatar Field -->
-                            <div class="col-sm-6">
-                                <label for="avatar">Avatar</label>
-                                <input class="form-control" name="avatar" type="file" id="avatar" onchange="viewAvatar(this)">
-                                <br>
-                                <p><img id="avartar-img-show" src="{{ asset('/storage/avatars/avatar.png') }}" alt="avatar" class="img-responsive" width="200px" height="200px"></p>
-                            </div>
                             <div class="clearfix"></div>
                         </div>
                         <div class="form-group">

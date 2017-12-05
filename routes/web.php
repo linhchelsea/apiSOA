@@ -12,7 +12,7 @@
 */
 
 Route::group(['prefix'=> 'admin','namespace'=>'BackEnd'],function (){
-    Route::resource('users','AdminController');
+    Route::resource('users','UserController');
     Route::resource('lessons','LessonController');
     Route::resource('sentences','SentenceController');
     Route::resource('user-learnt','UserLearntController');
@@ -22,3 +22,4 @@ Route::group(['prefix'=> 'admin','namespace'=>'BackEnd'],function (){
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/lesson/{remember_token}', 'LessonController@index')->name('home');

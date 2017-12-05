@@ -6,6 +6,7 @@ use App\Lesson;
 use App\User;
 use App\UserLearnt;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class LessonController extends Controller
 {
