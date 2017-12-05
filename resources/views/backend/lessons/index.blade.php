@@ -16,42 +16,41 @@
                 <div class="box box-defautl">
                 <div class="box-header" style="background-color: #f4f4f4; ">
                         <h3 class="pull-left" style="margin: 4px 5px 0px 5px;">
-                            Users
+                            Lessons
                         </h3>
                         <div class="pull-right" style="margin: 0px 10px;">
-                            <a class="btn btn-success pull-right" href="{{ route('users.create') }}"><i class="glyphicon glyphicon-plus"></i> New user</a>
+                            <a class="btn btn-success pull-right" href="{{ route('lessons.create') }}"><i class="glyphicon glyphicon-plus"></i> New lesson</a>
                         </div>
                     </div>
                     <div class="box-body table-responsive">
-                        <table class="table table-responsive table-bordered" id="tours-table">
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
+                        <table class="table table-responsive table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Fullname</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Level</th>
-                                    <th class="text-center" colspan="3">Actions</th>
+                                    <th class="text-center">Id</th>
+                                    <th class="text-center">Lesson's English Name</th>
+                                    <th class="text-center">Lesson's VietNamese Name</th>
+                                    <th class="text-center">Image</th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @if(count($users) == 0)
-                                <tr>
-                                    <td colspan="6" class="text-center text-blue">
-                                        <h4>NO USER TO SHOW</h4>
-                                    </td>
-                                </tr>
-                            @else
-                                @foreach($users as $user)
+                            @if(count($lessons) > 0)
+                                @foreach($lessons as $lesson)
                                     <tr>
-                                        <td class="text-center">{{$user->name}}</td>
-                                        <td class="text-center">{{$user->email}}</td>
-                                        <td class="text-center">{{$user->level}}</td>
+                                        <td class="text-center" >{{ $lesson->Id }}</td>
+                                        <td class="text-center">{{ $lesson->LessonNameEn }}</td>
+                                        <td class="text-center">{{ $lesson->LessonNameVi }}</td>
                                         <td class="text-center">
-                                            <form method="POST" action="{{ route('users.destroy',$user->id) }}" accept-charset="UTF-8">
+                                            <img src="{{ asset('/storage/lesson/'.$lesson->LessonPathImage) }}" alt="image" id="lesson" width="150px" height="150px" class="indexImage">
+                                        </td>
+                                        <td class="text-center">
+                                            <form method="POST" action="{{ route('lessons.destroy', $lesson->Id) }}" accept-charset="UTF-8">
                                                 <input name="_method" type="hidden" value="DELETE">
                                                 {{ csrf_field() }}
                                                 <div class='btn-group'>
-                                                    <a href="{{ route('users.edit', $user->id) }}" class='btn btn-warning'>Edit</a>
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm(&#039;You want to delete this user?&#039;)">
+                                                    <a href="{{ route('lessons.edit', $lesson->Id) }}" class='btn btn-warning'>Edit</a>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm(&#039;You want to remove this lesson?&#039;)">
                                                         Delete
                                                     </button>
                                                 </div>
@@ -59,13 +58,19 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="7" class="text-center text-blue">
+                                        <h4><span style="font-style: inherit">No Lessons to show</span></h4>
+                                    </td>
+                                </tr>
                             @endif
                             </tbody>
                         </table>
                     </div>
                     <div class="box-footer clearfix">
                         <div class="pagination-sm no-margin pull-right">
-                            {{ $users->links() }}
+                            {{ $lessons->links() }}
                         </div>
                     </div>
                 </div>

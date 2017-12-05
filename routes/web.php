@@ -12,7 +12,7 @@
 */
 
 Route::group(['prefix'=> 'admin','namespace'=>'BackEnd'],function (){
-    Route::resource('users','AdminController');
+    Route::resource('users','UserController');
     Route::resource('lessons','LessonController');
     Route::resource('sentences','SentenceController');
     Route::resource('user-learnt','UserLearntController');
