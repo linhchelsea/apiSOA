@@ -18,9 +18,6 @@
                         <h3 class="pull-left" style="margin: 4px 5px 0px 5px;">
                             Users
                         </h3>
-                        <div class="pull-right" style="margin: 0px 10px;">
-                            <a class="btn btn-success pull-right" href="{{ route('users.create') }}"><i class="glyphicon glyphicon-plus"></i> New user</a>
-                        </div>
                     </div>
                     <div class="box-body table-responsive">
                         <table class="table table-responsive table-bordered" id="tours-table">
@@ -46,16 +43,13 @@
                                         <td class="text-center">{{$user->email}}</td>
                                         <td class="text-center">{{$user->level}}</td>
                                         <td class="text-center">
-                                            <form method="POST" action="{{ route('users.destroy',$user->id) }}" accept-charset="UTF-8">
-                                                <input name="_method" type="hidden" value="DELETE">
-                                                {{ csrf_field() }}
-                                                <div class='btn-group'>
-                                                    <a href="{{ route('users.edit', $user->id) }}" class='btn btn-warning'>Edit</a>
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm(&#039;You want to delete this user?&#039;)">
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            </form>
+                                            <a href="{{ route('users.show', $user->id) }}" class='btn btn-success'>Detail</a>
+                                            <a href="{{ route('users.edit', $user->id) }}" class='btn btn-warning'>Edit</a>
+                                            @if(!$user->isBlocked)
+                                            <a href="{{ route('blockUser', $user->id) }}" class='btn btn-danger'>Block</a>
+                                            @else
+                                            <a href="{{ route('unLockUser', $user->id) }}" class='btn btn-primary'>Unlock</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

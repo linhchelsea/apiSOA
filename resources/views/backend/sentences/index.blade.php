@@ -41,7 +41,7 @@
                                         <td class="text-center" >{{ $sentence->Id }}</td>
                                         <td class="text-center">{{ $sentence->EngSentence }}</td>
                                         <td class="text-center">{{ $sentence->VieSentence }}</td>
-                                        <td class="text-center">{{$sentence->IdTopic}} - {{ $sentence->EngName }} ({{$sentence->VieName}})</td>
+                                        <td class="text-center">{{ $sentence->EngName }} ({{$sentence->VieName}})</td>
                                         <td class="text-center" width="120px">
                                             <form style="width: 120px; " method="POST" action="{{ route('sentences.destroy', $sentence->Id) }}" accept-charset="UTF-8">
                                                 <input name="_method" type="hidden" value="DELETE">

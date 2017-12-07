@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BackEnd;
 
+use App\BlockUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -24,64 +25,28 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('id','DESC')
+        $users = User::where('isAdmin','=',0)
+            ->orderBy('id','DESC')
             ->paginate(10);
+        foreach ($users as $user){
+            $blockUser = BlockUser::where('idUser','=',$user->id)->first();
+            if($blockUser != null ) $user->isBlocked = true;
+            else $user->isBlocked = false;
+        }
         return view('backend.users.index')->with('users',$users);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('backend.users.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $user = new User();
-        $user->name = $request->fullname;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->isAdmin = 0;
-        //kiem tra email co bi trong khong
-        $user_checkEmail = User::where('email','=',$user->email)->first();
-        if($user_checkEmail != null){
-            $request->session()->flash('fail', 'Email was used by another user');
-            return redirect()->back();
-        }
-        $user->password = bcrypt($request->password);
-        $user->level = 1;
-        $user->setRememberToken(app('App\Http\Controllers\UserController')->randomRememberToken());
-        if($user->save()) {
-            $request->session()->flash('success', 'New user was created successfully!');
+    public function show($id){
+        $user = User::findOrFail($id);
+        $blockUser = BlockUser::where('idUser','=',$id)->first();
+        if($blockUser != null ){
+            $user->idBlocked = true;
+            $user->reason = $blockUser->reason;
         }else{
-            $request->session()->flash('fail', 'New user was created unsuccessfully!');
+            $user->isBlocked = false;
         }
-        //Them bai 1-2-3 trong user learnt
-        app('App\Http\Controllers\UserController')->createFirstThreeLessons($user->id);
-        return redirect()->route('users.index');
+        return view('backend.users.show',compact('user'));
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -107,7 +72,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         //Lay thong tin tu form
-        $user->name = $request->fullname;
         if($request->password != null){
             if($request->password != $request->password_confirmation){
                 $request->session()->flash('fail','Password and Password Confirm are not the same!');
@@ -153,6 +117,27 @@ class UserController extends Controller
                 $request->session()->flash('success', 'User was deleted unsuccessfully!');
             }
         }
+        return redirect()->route('users.index');
+    }
+
+    public function getBlockUser(Request $request){
+        $user = User::findOrFail($request->idUser);
+        return view('backend.users.block',compact('user'));
+    }
+    public function postBlockUser(Request $request)
+    {
+        $user = User::findOrFail($request->idUser);
+        $blockUser = new BlockUser();
+        $blockUser->idUser = $user->id;
+        $blockUser->reason = $request->reason;
+        $blockUser->save();
+        return redirect()->route('users.index');
+    }
+
+    public function getUnLockUser(Request $request){
+        $user = User::findOrFail($request->idUser);
+        $blockUser = BlockUser::where('idUser','=',$user->id)->first();
+        $blockUser->delete();
         return redirect()->route('users.index');
     }
 }

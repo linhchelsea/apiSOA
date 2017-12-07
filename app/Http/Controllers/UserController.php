@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BlockUser;
 use App\FavouriteWord;
 use App\Lesson;
 use App\Memorize;
@@ -171,13 +172,23 @@ class UserController extends Controller
             'password' => $request->password
         ];
         if(Auth::attempt($login)){
+            //kiem tra bi block
+            $blockUser = BlockUser::where('idUser','=',Auth::user()->id)->first();
+            if($blockUser != null){
+                return response()->json([
+                    'status' => 'fail',
+                    'message' => 'Your account is blocked',
+                    'reason' => $blockUser->reason
+                ]);
+            }
             return response()->json([
                 'status' => 'success',
                 'token' => Auth::user()->getRememberToken()
             ]);
         }
         return response()->json([
-            'status' => 'fail'
+            'status' => 'fail',
+            'message' => "Email or password is incorrect"
         ]);
     }
     public function logout(Request $request){

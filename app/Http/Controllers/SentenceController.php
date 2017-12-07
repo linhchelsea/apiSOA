@@ -29,7 +29,7 @@ class SentenceController extends Controller
         $res = [
             'sentences' => $sentences,
             'status' => 'success',
-            'message' => 'get list'
+            'message' => 'List Sentence'
         ];
         return $res;
     }

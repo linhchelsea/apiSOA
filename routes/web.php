@@ -18,6 +18,9 @@ Route::group(['prefix'=> 'admin','namespace'=>'BackEnd'],function (){
     Route::resource('topics','TopicController');
     Route::resource('sentences','SentenceController');
     Route::resource('vocabularies','VocabularyController');
+    Route::get('/block-user/{idUser}','UserController@getBlockUser')->name('blockUser');
+    Route::post('/block-user/{idUser}','UserController@postBlockUser')->name('block-user');
+    Route::get('/unlock-user/{idUser}','UserController@getUnLockUser')->name('unLockUser');
 });
 
 Auth::routes();

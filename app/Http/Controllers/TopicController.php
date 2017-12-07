@@ -16,6 +16,7 @@ class TopicController extends Controller
         $topics = Topic::all();
         $res = [
             "status" => "success",
+            "message" => "List Topic",
             "topics" => $topics
         ];
         return response()->json($res);
