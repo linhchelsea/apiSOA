@@ -52,6 +52,6 @@ Route::put('memorizeUpdate','MemorizeController@update');
 Route::delete('memorizeDelete','MemorizeController@destroy');
 Route::post('memorizeByUser','MemorizeController@getListMemorize');
 
-
+Route::post('topicList','TopicController@index');
 Route::post('login','UserController@postLogin');
 Route::post('logout','UserController@logout');
