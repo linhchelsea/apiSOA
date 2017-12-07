@@ -13,7 +13,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border" style="background-color: #c4e3f3;" >
                     <h3 style="margin: 0px 5px; color: #0d6496;">
-                        Update Lesson
+                        Update Vocabulary
                     </h3>
                 </div>
                 <div class="box-body">
@@ -42,15 +42,19 @@
                             </div>
                             <div class="form-group">
                                 <!-- Category Field -->
+                                <?php
+                                $categories = array("", "(v)", "(n)", "(adj)", "(adv)", "(pret)");
+                                ?>
                                 <div class="col-sm-10">
                                     <label for="VocaCategory">Category</label>
                                     <select name="VocaCategory" id="VocaCategory" class="form-control">
-                                        <option value=""></option>
-                                        <option value="(v)">(v)</option>
-                                        <option value="(n)">(n)</option>
-                                        <option value="(adj)">(adj)</option>
-                                        <option value="(adv)">(adv)</option>
-                                        <option value="(pret)">(pret)</option>
+                                        @for ($i = 0; $i < count($categories); $i++)
+                                            @if ($categories[$i] == $vocabulary->VocaCategory)
+                                                <option selected="selected" value="{{ $categories[$i] }}">{{$categories[$i]}}</option>
+                                            @else
+                                                <option value="{{ $categories[$i] }}">{{$categories[$i]}}</option>
+                                            @endif
+                                        @endfor
                                     </select>
                                 </div>
                                 <div class="clearfix"></div>
@@ -109,7 +113,7 @@
                                 <!-- Submit Field -->
                                 <div class="col-sm-12">
                                     <button class="btn btn-warning" type="button" onclick="window.location='{{ url()->previous() }}';" style="margin-left: 5px;"><i class="fa fa-reply-all" aria-hidden="true"></i> BACK</button>
-                                    <button type="submit" form="lesson" class="btn btn-primary" name="submit" value="UPDATE"><i class="glyphicon glyphicon-edit"></i> UPDATE</button>
+                                    <button type="submit" form="vocabulary" class="btn btn-primary" name="submit" value="UPDATE"><i class="glyphicon glyphicon-edit"></i> UPDATE</button>
                                 </div>
                             </div>
                         </form>

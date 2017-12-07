@@ -17,7 +17,6 @@ Route::group(['prefix'=> 'admin','namespace'=>'BackEnd'],function (){
     Route::resource('lessons','LessonController');
     Route::resource('topics','TopicController');
     Route::resource('sentences','SentenceController');
-    Route::resource('user-learnt','UserLearntController');
     Route::resource('vocabularies','VocabularyController');
 });
 

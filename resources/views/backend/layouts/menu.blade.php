@@ -5,14 +5,14 @@
     <ul class="nav navbar-nav">
         <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <img src="{{ asset("/storage/avatars/avatar.png")}}" class="user-image" alt="#">
-                <span class="hidden-xs">Nguyen Manh Linh</span>
+                    <img src="{{ asset("/backend/images/avatar.png")}}" class="user-image" alt="#">
+                <span class="hidden-xs">Phan Thanh Thuan{{--{{ Auth::user()->name }}--}}</span>
             </a>
             <ul class="dropdown-menu">
                 <li class="user-header">
-                    <img src="{{ asset("/storage/avatars/avatar.png") }}" class="img-circle" alt="User Image">
+                    <img src="{{ asset("/backend/images/avatar.png") }}" class="img-circle" alt="User Image">
                     <p>
-                        Nguyen Manh Linh
+                        Phan Thanh Thuan{{--{{ Auth::user()->name }}--}}
                     </p>
                 </li>
                 <li class="user-footer">
