@@ -48,7 +48,7 @@
                                     <label for="password_confirmation">Password Confirmation</label>
                                 <input class="form-control" name="password_confirmation" type="password" id="password_confirmation" value="">
                             </div>
-                            
+
                             <div class="clearfix"></div>
                         </div>
                         <div class="form-group">

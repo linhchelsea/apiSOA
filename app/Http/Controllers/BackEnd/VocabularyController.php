@@ -113,7 +113,38 @@ class VocabularyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $vocabulary = Vocabulary::findOrFail($id);
+        $vocabulary->VocaCategory = $request->VocaCategory;
+        $vocabulary->VocaExample = $request->VocaExample;
+        $vocabulary->VocaExplain = $request->VocaExplain;
+        $vocabulary->LessonNumber = $request->LessonNumber;
+        $vocabulary->VocaPronouce = $request->VocaPronouce;
+        $vocabulary->VocaEn = $request->VocaEn;
+        $vocabulary->VocaVi = $request->VocaVi;
+        if($request->file('image') != null){
+            $checkFile = app('App\Http\Controllers\BackEnd\LessonController')->CheckFileUpload($request->file('image')->getClientOriginalName());
+            if(!$checkFile){
+                $request->session()->flash('fail','Image format is invalid (jpg,jpeg,png,gif)!');
+                return redirect()->back();
+            }
+            //xoa anh cu~
+            if($vocabulary->VocaPath != 'default.png') {
+                File::delete('storage/vocabulary/' . $vocabulary->VocaPath);
+            }
+            $image = $request->file('image')->store('public/vocabulary');
+            $arr_filename = explode("/",$image);
+            $filename = end($arr_filename);
+        }else{
+            $filename = $vocabulary->VocaPath;
+        }
+        $vocabulary->VocaPath = $filename;
+
+        if($vocabulary->save()){
+            $request->session()->flash('success','Update successfully!');
+        }else{
+            $request->session()->flash('fail','Update unsuccessfully!');
+        }
+        return redirect()->route('vocabularies.index');
     }
 
     /**

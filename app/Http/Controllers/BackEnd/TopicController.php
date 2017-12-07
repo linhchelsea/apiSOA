@@ -7,7 +7,7 @@ use App\Topic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class SentenceController extends Controller
+class TopicController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,16 +16,9 @@ class SentenceController extends Controller
      */
     public function index()
     {
-        $sentences = Sentence::orderBy('Id','DESC')
+        $topics = Topic::orderBy('Id','DESC')
             ->paginate(10);
-        if(count($sentences) > 0){
-            foreach ($sentences as $sentence){
-                $topic = Topic::findOrFail($sentence->IdTopic);
-                $sentence->EngName = $topic->EngName;
-                $sentence->VieName = $topic->VieName;
-            }
-        }
-        return view('backend.sentences.index')->with('sentences',$sentences);
+        return view('backend.topics.index')->with('topics',$topics);
     }
 
     /**
@@ -35,8 +28,7 @@ class SentenceController extends Controller
      */
     public function create()
     {
-        $topics = Topic::all();
-        return view('backend.sentences.create', compact('topics'));
+        return view("backend.topics.create");
     }
 
     /**
@@ -47,16 +39,27 @@ class SentenceController extends Controller
      */
     public function store(Request $request)
     {
-        $sentence = new Sentence();
-        $sentence->IdTopic = $request->Topic;
-        $sentence->EngSentence = $request->EngSentence;
-        $sentence->VieSentence = $request->VieSentence;
-        if($sentence->save()){
+        $topic = new Topic();
+        $topic->EngName = $request->EngName;
+        $topic->VieName = $request->VieName;
+
+        if($topic->save()){
             $request->session()->flash('success','Create successfully!');
         }else{
             $request->session()->flash('fail','Create unsuccessfully!');
         }
-        return redirect()->route('sentences.index');
+        return redirect()->route('topics.index');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
     }
 
     /**
@@ -67,9 +70,8 @@ class SentenceController extends Controller
      */
     public function edit($id)
     {
-        $sentence = Sentence::findOrFail($id);
-        $topics = Topic::all();
-        return view('backend.sentences.edit',compact('topics', 'sentence'));
+        $topic = Topic::findOrFail($id);
+        return view('backend.topics.edit', compact('topic'));
     }
 
     /**
@@ -81,16 +83,15 @@ class SentenceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $sentence = Sentence::findOrFail($id);
-        $sentence->IdTopic = $request->Topic;
-        $sentence->EngSentence = $request->EngSentence;
-        $sentence->VieSentence = $request->VieSentence;
-        if($sentence->save()){
+        $topic = Topic::findOrFail($id);
+        $topic->EngName = $request->EngName;
+        $topic->VieName = $request->VieName;
+        if($topic->save()){
             $request->session()->flash('success','Update successfully!');
         }else{
             $request->session()->flash('fail','Update unsuccessfully!');
         }
-        return redirect()->route('sentences.index');
+        return redirect()->route('topics.index');
     }
 
     /**
@@ -101,12 +102,21 @@ class SentenceController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $sentence = Sentence::findOrFail($id);
-        if($sentence->delete()){
+        $topic = Topic::findOrFail($id);
+        //xoa danh sach Sentence
+        $sentences = Sentence::where('IdTopic','=',$topic->id)
+            ->get();
+        if(count($sentences) > 0){
+            foreach ($sentences as $sentence){
+                $sentence->delete();
+            }
+        }
+        //xoa anh cua lesson
+        if($topic->delete()){
             $request->session()->flash('success','Delete successfully!');
         }else{
             $request->session()->flash('fail','Delete unsuccessfully!');
         }
-        return redirect()->route('sentences.index');
+        return redirect()->back();
     }
 }
