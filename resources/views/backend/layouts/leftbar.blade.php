@@ -15,6 +15,11 @@
                 <i class="fa fa-home"></i> <span>Lessons</span>
             </a>
         </li>
+        <li class="{{ Request::is('admin/topic*')? 'active' : '' }}">
+            <a href="{{ route('topics.index') }}">
+                <i class="fa fa-home"></i> <span>Topic</span>
+            </a>
+        </li>
         <li class="{{ Request::is('admin/sentences*')? 'active' : '' }}">
             <a href="{{ route('sentences.index') }}">
                 <i class="fa fa-home"></i> <span>Sentences</span>
