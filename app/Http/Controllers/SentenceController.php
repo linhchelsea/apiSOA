@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Sentence;
+use App\Topic;
 use Illuminate\Http\Request;
 use Psy\Test\Exception\RuntimeExceptionTest;
 
@@ -13,10 +14,20 @@ class SentenceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $idTopic = $request->idTopic;
+        $topic = Topic::find($idTopic);
+        if($topic == null ){
+            $res = [
+                'status' => 'fail',
+                'message' => 'Topic does not exist'
+            ];
+            return $res;
+        }
+        $sentences = Sentence::where('IdTopic','=',$idTopic)->get();
         $res = [
-            'sentences' => Sentence::all(),
+            'sentences' => $sentences,
             'status' => 'success',
             'message' => 'get list'
         ];

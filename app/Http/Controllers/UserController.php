@@ -52,6 +52,7 @@ class UserController extends Controller
             $user->password = bcrypt($user->password);
             $user->email = $request->email;
             $user->level = 1;
+            $user->isAdmin = 0;
             $user->setRememberToken(self::randomRememberToken());
             $user->save();
             //Them bai 1-2-3 trong user learnt
