@@ -21,7 +21,7 @@
                     <div class="alert alert-danger"><p><strong>{{ Session::get('fail') }}</strong></p></div>
                 @endif
                 <div class="row">
-                    <form method="POST" action="{{ route('users.update',$user->id) }}" accept-charset="UTF-8" id="user_update" class="userUpdateForm" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('users.update',$user->id) }}" accept-charset="UTF-8" id="user_update" class="userForm" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="_method" value="PUT">
                         <div class="form-group">
