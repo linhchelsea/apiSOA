@@ -6,18 +6,18 @@
         <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <img src="{{ asset("/backend/images/avatar.png")}}" class="user-image" alt="#">
-                <span class="hidden-xs">Phan Thanh Thuan{{--{{ Auth::user()->name }}--}}</span>
+                <span class="hidden-xs">{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu">
                 <li class="user-header">
                     <img src="{{ asset("/backend/images/avatar.png") }}" class="img-circle" alt="User Image">
                     <p>
-                        Phan Thanh Thuan{{--{{ Auth::user()->name }}--}}
+                        {{ Auth::user()->name }}
                     </p>
                 </li>
                 <li class="user-footer">
                     <div class="pull-left">
-                        <a href="" class="btn btn-warning">Profile</a>
+                        <a href="{{ route('profile') }}" class="btn btn-warning">Profile</a>
                     </div>
                     <div class="pull-right">
                         <a href="" class="btn btn-danger"

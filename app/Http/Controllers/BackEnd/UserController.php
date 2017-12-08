@@ -9,6 +9,7 @@ use App\User;
 use App\FavouriteWord;
 use App\Memorize;
 use App\UserLearnt;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -139,5 +140,29 @@ class UserController extends Controller
         $blockUser = BlockUser::where('idUser','=',$user->id)->first();
         $blockUser->delete();
         return redirect()->route('users.index');
+    }
+    public function getProfile(Request $request){
+        $user = User::findOrFail(Auth::user()->id);
+        return view('backend.users.profile', compact('user'));
+    }
+
+    public function putProfile(Request $request)
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        //Lay thong tin tu form
+        $user->name = $request->fullname;
+        if($request->password != null){
+            if($request->password != $request->password_confirmation){
+                $request->session()->flash('fail','Password and Password Confirm are not the same!');
+                return redirect()->back();
+            }
+            $user->password = bcrypt($request->password);
+        }
+        if($user->save()) {
+            $request->session()->flash('success', 'Profile was updated successfully!');
+        }else{
+            $request->session()->flash('fail', 'Profile was updated successfully!');
+        }
+        return redirect()->route('profile');
     }
 }

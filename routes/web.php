@@ -21,6 +21,8 @@ Route::group(['prefix'=> 'admin','namespace'=>'BackEnd'],function (){
     Route::get('/block-user/{idUser}','UserController@getBlockUser')->name('blockUser');
     Route::post('/block-user/{idUser}','UserController@postBlockUser')->name('block-user');
     Route::get('/unlock-user/{idUser}','UserController@getUnLockUser')->name('unLockUser');
+    Route::get('/profile', 'UserController@getProfile')->name('profile');
+    Route::put('/profile', 'UserController@putProfile')->name('updateProfile');
 });
 
 Auth::routes();
