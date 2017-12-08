@@ -37,8 +37,12 @@ class UserController extends Controller
         return view('backend.users.index')->with('users',$users);
     }
 
-    public function show($id){
+    public function show(Request $request, $id){
         $user = User::findOrFail($id);
+        if($user->isAdmin === 1 ){
+            $request->session()->flash('fail','You can not see admin');
+            return redirect()->back();
+        }
         $blockUser = BlockUser::where('idUser','=',$id)->first();
         if($blockUser != null ){
             $user->idBlocked = true;
@@ -54,10 +58,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
+        if($user->isAdmin === 1 ){
+            $request->session()->flash('fail','You can not edit admin');
+            return redirect()->back();
+        }
         return view('backend.users.edit')->with('user',$user);
     }
 
@@ -98,7 +105,10 @@ class UserController extends Controller
     public function destroy(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
+        if($user->isAdmin === 1 ){
+            $request->session()->flash('fail','You can not delete admin');
+            return redirect()->back();
+        }
         if($user != null) {
             //xoa het cac thong tin lien quan toi user
             //UserLearnt
@@ -123,6 +133,10 @@ class UserController extends Controller
 
     public function getBlockUser(Request $request){
         $user = User::findOrFail($request->idUser);
+        if($user->isAdmin === 1 ){
+            $request->session()->flash('fail','You can not block admin');
+            return redirect()->back();
+        }
         return view('backend.users.block',compact('user'));
     }
     public function postBlockUser(Request $request)
