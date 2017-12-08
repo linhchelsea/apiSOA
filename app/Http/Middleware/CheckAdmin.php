@@ -16,7 +16,7 @@ class CheckAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->isAdmin == 0){
+        if(Auth::user()->isAdmin === 0){
             $request->session()->flash('error','You are not Administrator');
             return redirect()->back();
         }

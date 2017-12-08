@@ -10,6 +10,11 @@ use App\Http\Controllers\Controller;
 
 class VocabularyController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('checkAdmin');
+    }
     /**
      * Display a listing of the resource.
      *
